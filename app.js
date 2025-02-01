@@ -44,7 +44,7 @@ router.post("/neworder", async (req, res) => {
                 }
             });
         });
-        const messagePromise = sendMessage(time, date, amount, from, to);
+        const messagePromise = sendMessage(time, date, amount, from, to, name, number, services);
 
         await Promise.all([emailPromise, messagePromise]);
 
@@ -55,20 +55,20 @@ router.post("/neworder", async (req, res) => {
 
 });
 
-const sendMessage = (amount, time, date, from, to,) => {
+const sendMessage = (time, date, amount, from, to, name, number, services) => {
     return new Promise((resolve, reject) => {
         client.messages.create({
-            body: `Drop Taxi \nYour order was successfully booked \nFrom : ${from} \nTo : ${to} \nDate : ${date} \nTime : ${time} \nOrder Amount : ${amount}`,
+            body: `Drop Taxi🚗🎉 \A new order has been successfully placed. Please find the details below: \nFrom : ${from} \nTo : ${to}\nService : ${services} \nDate : ${date} \nTime : ${time} \nOrder Amount : ${amount}\nName : ${name}\nNumber : ${number}`,
             from: 'whatsapp:+14155238886',
             to: `whatsapp:+919790860187`,
         })
             .then(message => {
                 console.log(`Message sent with SID: ${message.sid}`);
-                resolve(message.sid); 
+                resolve(message.sid);
             })
             .catch(error => {
                 console.error(`Error sending message: ${error.message}`);
-                reject(error); 
+                reject(error);
             });
     });
 }
